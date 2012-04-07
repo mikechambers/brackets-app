@@ -313,11 +313,11 @@ if (!brackets.app) {
      * @return None. This is an asynchronous call that sends all return information to the callback.
      */
     native function OpenLiveBrowser();
-    brackets.app.openLiveBrowser = function (url, callback) {
-        setTimeout(function() {
-            OpenLiveBrowser(url);
-            callback(getLastError());
-        }, 0);
+    brackets.app.openLiveBrowser = function (url, callback, userDataDir) {
+        //setTimeout(function() {
+            var pid = OpenLiveBrowser(url, userDataDir);
+            callback(getLastError(), pid);
+        //}, 0);
     };
     
     /**
@@ -334,8 +334,8 @@ if (!brackets.app) {
      * @return None. This is an asynchronous call that sends all return information to the callback.
      */
     native function CloseLiveBrowser();
-    brackets.app.closeLiveBrowser = function (callback) {
-        CloseLiveBrowser(callback);
+    brackets.app.closeLiveBrowser = function (callback, pid) {
+        CloseLiveBrowser(callback, pid);
     };
 
 })();
