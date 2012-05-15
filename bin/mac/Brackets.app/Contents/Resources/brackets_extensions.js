@@ -320,7 +320,11 @@ if (!brackets.app) {
         DeleteFileOrDirectory(path);
         invokeCallback(callback, getLastError());
     };
-
+    
+    brackets.fs.remove = function (path, callback){
+        DeleteFileOrDirectory(path);
+        invokeCallback(callback, getLastError());
+    }
     /**
      * Return the number of milliseconds that have elapsed since the application
      * was launched. 

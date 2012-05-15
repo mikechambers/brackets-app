@@ -692,12 +692,26 @@ public:
         
         NSString* path = [NSString stringWithUTF8String:pathStr.c_str()];
         
+        //the File System specification says that it is an error to try and remove the
+        //root directory
+        //http://www.w3.org/TR/2011/WD-file-system-api-20110419/#widl-Entry-remove
+        NSArray *volumes = [[NSFileManager defaultManager] mountedVolumeURLsIncludingResourceValuesForKeys: nil options:0];
+        
+        //make sure that the path being removed is not a root directory on one of the volumes
+        //although, technically, on OS X and Linux, there is only 1 root directory /
+        for (id volume in volumes) {
+            if([[NSFileManager defaultManager] contentsEqualAtPath:path andPath:[volume path]])
+            {
+                NSLog(@"At root directory.");
+            }
+        }
+        
         if ([[NSFileManager defaultManager] removeItemAtPath:path error:&error])
             return NO_ERROR;
         
         return ConvertNSErrorCode(error, false);
     }
-  
+    
     int ExecuteQuitApplication(const CefV8ValueList& arguments,
                                CefRefPtr<CefV8Value>& retval,
                                CefString& exception)
